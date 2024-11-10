@@ -1,0 +1,40 @@
+OBS links.
+==========
+
+How to read live data:
+
+https://medium.com/spark1-us/car-hacking-with-python-part-1-data-exfiltration-gps-and-obdii-can-bus-69bc6b101fd1
+
+https://stackoverflow.com/questions/42469390/reading-datas-from-obd-elm327-python-obd
+
+https://python-obd.readthedocs.io/en/latest/Connections/
+
+
+
+Print:
+https://obdeleven.com/how-to-read-obd-live-data-step-by-step-guide?srsltid=AfmBOopYQCbNXZeRRNuaRt1vzW2Ms2MKNu7n9gBNhzdLBE_rVHgdaZTs
+
+https://obdsoftware.my.site.com/s/article/How-to-read-OBDII-live-data-A-mechanic-guide
+
+https://en.wikipedia.org/wiki/OBD-II_PIDs
+
+https://en.wikipedia.org/wiki/On-board_diagnostics
+
+
+Python libs:
+
+https://python-obd.readthedocs.io/en/latest/
+
+https://pypi.org/project/obd/0.1.0/
+
+
+!!!
+Ready Raspi+BT implementation:
+C:\ttmp_tmp\obd\pyobd-pi-master
+from here: https://pypi.org/project/obd/0.1.0/
+
+Brendan project:
+https://brendan-w.com/python-obd
+
+https://github.com/brendan-w/python-OBD
+

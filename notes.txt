@@ -1,0 +1,20 @@
+OBD RaspiPy
+===========
+ver. 241110_0904
+
+
+Input projects:
+---------------
+
+github.com/bendrick92/obdPi
+
+
+Description:
+------------
+
+- Extended functionality by logging OBD live data.
+- BT interface
+- GPS 3D position logger 
+- Push button(s) for events triggering
+- Perhaps move from Py to C++ or C
+

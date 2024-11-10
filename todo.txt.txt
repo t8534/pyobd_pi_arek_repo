@@ -1,0 +1,110 @@
+OBD RaspiPy
+===========
+ver. 241110_0904
+
+TODO:
+
+1.
+Select which project.
+
+Decision:
+Take https://github.com/Pbartek/pyobd-pi
+Next you can look over GPS at https://github.com/macsboost/pyobd-pi.
+And finally look over https://github.com/brendan-w/python-OBD.
+Perhaps you could change obd library.
+
+There are 2 mature, the first one is described as working by BT.
+There are also 2 OBD libraries: pyOBD and python-OBD.
+
+https://python-obd.readthedocs.io/en/latest/
+
+https://pypi.org/project/obd/0.1.0/
+This library is forked from:
+    https://github.com/peterh/pyobd
+    https://github.com/Pbartek/pyobd-pi
+
+
+
+1.1
+https://github.com/Pbartek/pyobd-pi
+E:\projects\obd_raspi\obd_input_docs\pyobd-pi-master
+
+The vehicle installation is well described.
+Also how to start it.
+The project files looks mature.
+
+"I took a fork of pyOBD’s software from their GitHub repository, https://github.com/peterh/pyobd,
+and used this as the basis for my program.
+The program will connect through the OBD-II interface, display the gauges available dependent
+on the particular vehicle and display realtime engine data to the cars aftermarket head unit
+in an interactive GUI."
+
+So the description above looks like it contains everything I need for start.
+So take it as a base.
+
+Note:
+The forks from this project:
+
+https://github.com/brendan-w/python-OBD    (see below).
+It has still a high activity.
+
+https://github.com/macsboost/pyobd-pi
+"Modification of pyobd and OBD-Pi with data logging centric features
+Hardware Required:
+1. Raspberry Pi 2/3 running raspbian stretch.  This is important as the script runs python version 2. The raspbian buster and newer will not work.
+2. Ublox USB GPS 
+4. 2A Car Supply / Switch or Micro USB Car Charger"
+
+
+There is also fork from this project with additional CAN splitter, this project is 24 commits
+ahead from the parent one, you can look inside to find any interesting things.
+Anyway it is any 7 years old.
+
+https://github.com/rjswitzer3/pyobd-pi
+
+
+
+1.2
+https://github.com/bendrick92/obdPi
+Seems to be this is not BT based, however BT is a serial port only, used the same way
+as hwardwire serial, or usb serial converter.
+
+Its todo:
+
+Update logging system to log multiple OBD-II parameters simultaneously
+Update logging system to restrict number/age of logs saved - done
+Implement button-based switching of OBD-II commands
+Implement asynchronous OBD-II requests (via python-OBD)
+Implement serial/OBD-II connection retries when failing after initial connection
+
+This is a fork from above https://github.com/Pbartek/pyobd-pi
+
+
+2.
+Analyze and run original OBD code on PC.
+Analyze libraries, there are two ones.
+Learn PyCharm, how to debug, etc.
+
+2.
+Still on PC add BT interface.
+Use way as at extended varion for Xctrack.
+
+3.
+Try to connect to a car OBD adapter and see row data.
+
+4.
+Receive the real OBD codes from car
+
+5.
+Add OBD living data write it to the disc.
+
+6.
+Move to Raspi, add display support.
+Which display ? 16x2 txt or graphics one ?
+
+7.
+Add pushbutton triggering
+
+8.
+Add GPS 3D log.
+
