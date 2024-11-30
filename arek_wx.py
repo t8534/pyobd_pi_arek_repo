@@ -13,108 +13,125 @@
 #// Start the event loop.
 #app.MainLoop()
 
-#!/usr/bin/env python
-"""
-Hello World, but with more meat.
-"""
 
+import os
 import wx
+import time
+from threading import Thread
 
-class HelloFrame(wx.Frame):
+#-------------------------------------------------------------------------------
+
+# OBD variables
+BACKGROUND_FILENAME = "bg_black.jpg"
+LOGO_FILENAME 		= "cowfish.png"
+
+#-------------------------------------------------------------------------------
+
+
+#-------------------------------------------------------------------------------
+
+class OBDFrame(wx.Frame):
     """
-    A Frame that says Hello World
+    OBD frame.
     """
 
-    def __init__(self, *args, **kw):
-        # ensure the parent's __init__ is called
-        super(HelloFrame, self).__init__(*args, **kw)
-
-        # create a panel in the frame
-        pnl = wx.Panel(self)
-
-        # put some text with a larger bold font on it
-        st = wx.StaticText(pnl, label="Hello World!")
-        font = st.GetFont()
-        font.PointSize += 10
-        font = font.Bold()
-        st.SetFont(font)
-
-        # and create a sizer to manage the layout of child widgets
-        sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(st, wx.SizerFlags().Border(wx.TOP|wx.LEFT, 25))
-        pnl.SetSizer(sizer)
-
-        # create a menu bar
-        self.makeMenuBar()
-
-        # and a status bar
-        self.CreateStatusBar()
-        self.SetStatusText("Welcome to wxPython!")
-
-
-    def makeMenuBar(self):
+    def __init__(self):
         """
-        A menu bar is composed of menus, which are composed of menu items.
-        This method builds a set of menus and binds handlers to be called
-        when the menu item is selected.
+        Constructor.
         """
+        wx.Frame.__init__(self, None, wx.ID_ANY, "OBD-Pi")
 
-        # Make a file menu with Hello and Exit items
-        fileMenu = wx.Menu()
-        # The "\t..." syntax defines an accelerator key that also triggers
-        # the same event
-        helloItem = fileMenu.Append(-1, "&Hello...\tCtrl-H",
-                "Help string shown in status bar for this menu item")
-        fileMenu.AppendSeparator()
-        # When using a stock ID we don't need to specify the menu item's
-        # label
-        exitItem = fileMenu.Append(wx.ID_EXIT)
+        image = wx.Image(BACKGROUND_FILENAME) 
+        width, height = wx.GetDisplaySize() 
+        image = image.Scale(width, height, wx.IMAGE_QUALITY_HIGH)
+        self.bitmap = wx.BitmapFromImage(image) 
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
 
-        # Now a help menu for the about item
-        helpMenu = wx.Menu()
-        aboutItem = helpMenu.Append(wx.ID_ABOUT)
+        self.panelLoading = OBDLoadingPanel(self)
+        self.sizer = wx.BoxSizer(wx.VERTICAL)
+        self.sizer.Add(self.panelLoading, 1, wx.EXPAND)
+        self.SetSizer(self.sizer)
 
-        # Make the menu bar and add the two menus to it. The '&' defines
-        # that the next letter is the "mnemonic" for the menu item. On the
-        # platforms that support it those letters are underlined and can be
-        # triggered from the keyboard.
-        menuBar = wx.MenuBar()
-        menuBar.Append(fileMenu, "&File")
-        menuBar.Append(helpMenu, "&Help")
+        self.panelLoading.showLoadingScreen()
+        self.panelLoading.SetFocus()
 
-        # Give the menu bar to the frame
-        self.SetMenuBar(menuBar)
+        
+    def update(self, event):
+        if self.panelLoading:
+            connection = self.panelLoading.getConnection()
+            sensors = self.panelLoading.getSensors()
+            port = self.panelLoading.getPort()
+            self.panelLoading.Destroy()
+        self.panelGauges = OBDPanelGauges(self)
+        
+        if connection:
+            self.panelGauges.setConnection(connection)
 
-        # Finally, associate a handler function with the EVT_MENU event for
-        # each of the menu items. That means that when that menu item is
-        # activated then the associated handler function will be called.
-        self.Bind(wx.EVT_MENU, self.OnHello, helloItem)
-        self.Bind(wx.EVT_MENU, self.OnExit,  exitItem)
-        self.Bind(wx.EVT_MENU, self.OnAbout, aboutItem)
+        if sensors:
+            self.panelGauges.setSensors(sensors)
+            self.panelGauges.setPort(port)
+        self.sizer = wx.BoxSizer(wx.VERTICAL)
+        self.sizer.Add(self.panelGauges, 1, wx.EXPAND)
+        self.SetSizer(self.sizer)
+        self.panelGauges.ShowSensors()
+        self.panelGauges.SetFocus()
+        self.Layout()
 
+    def OnPaint(self, event): 
+        self.Paint(wx.PaintDC(self)) 
 
-    def OnExit(self, event):
-        """Close the frame, terminating the application."""
-        self.Close(True)
+    def Paint(self, dc): 
+        dc.DrawBitmap(self.bitmap, 0, 0)     
+        
 
+#-------------------------------------------------------------------------------
 
-    def OnHello(self, event):
-        """Say hello to the user."""
-        wx.MessageBox("Hello again from wxPython")
+class OBDApp(wx.App):
+    """
+    OBD Application.
+    """
 
+    def __init__(self, redirect=False, filename=None, useBestVisual=False, clearSigInt=True):
+        """
+        Constructor.
+        """
+        wx.App.__init__(self, redirect, filename, useBestVisual, clearSigInt)
 
-    def OnAbout(self, event):
-        """Display an About Dialog"""
-        wx.MessageBox("This is a wxPython Hello World sample",
-                      "About Hello World 2",
-                      wx.OK|wx.ICON_INFORMATION)
+    def OnInit(self):
+        """
+        Initializer.
+        """
+        # Main frame                                           
+        frame = OBDFrame()
+        self.SetTopWindow(frame)
+        frame.ShowFullScreen(True)
+        frame.Show(True)
+        #frame.showLoadingPanel()
 
+        # This frame is used only to set the full screen mode  
+        # for the splash screen display and for transition with 
+        # the loading screen.
+        # This frame is not shown and will be deleted later on.
+        #frame0 = OBDFrame0()
+        #self.SetTopWindow(frame0)
+        #frame0.ShowFullScreen(True)
+        #self.SetTopWindow(frame0)
 
-if __name__ == '__main__':
-    # When this module is run (not imported) then create the app, the
-    # frame, show it, and start the event loop.
-    app = wx.App()
-    frm = HelloFrame(None, title='Hello World 2')
-    frm.Show()
-    app.MainLoop()
+        # Splash screen
+        #splash = OBDSplashScreen(frame0, frame0)
+        #self.SetTopWindow(splash)
+        #splash.Show(True)
+        #splash.ShowFullScreen(True)
 
+        return True
+
+    def FilterEvent(self, event):
+        if event.GetEventType == wx.KeyEvent:
+            pass
+
+#-------------------------------------------------------------------------------
+
+app = OBDApp(False)
+app.MainLoop()
+
+#-------------------------------------------------------------------------------
