@@ -1,0 +1,51 @@
+Worklog for obd_py
+==================
+
+[241201]
+
+#
+Install python serial - PySerial
+https://pyserial.readthedocs.io/en/latest/pyserial.html
+
+python -m pip install pyserial
+
+Ok, installed on Win.
+
+Documentation:
+https://pythonhosted.org/pyserial/
+
+https://pyserial.readthedocs.io/en/latest/tools.html
+
+List all ports with details:
+
+$ python -m serial.tools.list_ports -v
+/dev/ttyS0
+    desc: ttyS0
+    hwid: PNP0501
+/dev/ttyUSB0
+    desc: CP2102 USB to UART Bridge Controller
+    hwid: USB VID:PID=10C4:EA60 SER=0001 LOCATION=2-1.6
+2 ports found
+
+Example of BT communication: test/at_protocol.py
+
+#
+Python platform
+
+Python defines an in-built module platform that provides system information.
+
+The Platform module is used to retrieve as much possible information about the platform on which the program is being currently executed. Now by platform info, it means information about the device, it’s OS, node, OS version, Python version, etc. This module plays a crucial role when you want to check whether your program is compatible with the python version installed on a particular system or whether the hardware specifications meet the requirements of your program.
+This module already exists in the python library and does not require any installation using pip.
+
+It can be imported using the following syntax
+
+# Python program to display platform processor 
+  
+# import module 
+import platform 
+  
+# displaying platform processor 
+print('Platform processor:', platform.processor())
+
+
+
